@@ -19,6 +19,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const QUEUE_DIR = join(__dirname, 'task-queue')
 const activity = new Map()
 
+// Task files are unlinked only after their job runs, and a burst of 10 messages
+// takes ~13s (paced at ~1.2s each) while the queue is scanned every 10s. Without
+// this guard a second scan can pick up the still-lying file and fire the burst
+// again — a 10-message task silently becoming 20+.
+const inFlight = new Set()
+
 // Repeated/burst sends, for when the user asks to be spammed. Paced on purpose:
 // Baileys is an unofficial client, and back-to-back identical sends are the
 // pattern that gets a number flagged and banned — which takes the whole bot
@@ -187,6 +193,7 @@ async function runDueTasks(sock) {
   for (const f of files) {
     if (!f.startsWith('task-') || !f.endsWith('.json')) continue
     const fp = join(QUEUE_DIR, f)
+    if (inFlight.has(fp)) continue
     try {
       const task = JSON.parse(await readFile(fp, 'utf8'))
       const at = dueAt(task)
@@ -194,9 +201,14 @@ async function runDueTasks(sock) {
       if (at > now + 5000) continue
       const jid = await resolveTarget(task, fp)
       if (!jid) throw new Error('cannot resolve target chat')
-      await execute(sock, jid, task)
-      log('ran task', task.id || f, '->', jid, task.action)
-      await unlink(fp).catch(() => {})
+      inFlight.add(fp)
+      try {
+        await execute(sock, jid, task)
+        log('ran task', task.id || f, '->', jid, task.action)
+        await unlink(fp).catch(() => {})
+      } finally {
+        inFlight.delete(fp)
+      }
     } catch (err) {
       log('task failed:', f, err.message)
       await unlink(fp).catch(() => {})
