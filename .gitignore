@@ -1,0 +1,29 @@
+# Runtime secrets & session
+.env
+creds/
+creds.bak-*/
+qr.png
+
+# Downloads, logs, and user-facing files
+downloads/
+workspace/
+logs/
+outbox/
+task-queue/
+uploads/
+brain/
+
+# Dependencies
+node_modules/
+
+# Image generation
+image_gen/.venv/
+image_gen/.flow/
+image_gen/jobs/
+image_gen/__pycache__/
+__pycache__/
+*.pyc
+
+# Misc
+*.log
+.DS_Store

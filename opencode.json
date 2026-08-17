@@ -1,0 +1,71 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "provider": {
+    "opencode": {
+      "models": {
+        "deepseek-v4-flash-free": {
+          "options": {
+            "reasoningEffort": "high"
+          }
+        }
+      }
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "write": "allow",
+    "bash": {
+      "*": "allow",
+      "rm": "deny",
+      "rm *": "deny",
+      "sudo": "deny",
+      "sudo *": "deny",
+      "su *": "deny",
+      "shutdown *": "deny",
+      "reboot": "deny",
+      "reboot *": "deny",
+      "poweroff": "deny",
+      "poweroff *": "deny",
+      "halt": "deny",
+      "halt *": "deny",
+      "mkfs*": "deny",
+      "fdisk*": "deny",
+      "parted*": "deny",
+      "cryptsetup*": "deny",
+      "dd *": "deny",
+      "git push -f*": "deny",
+      "git push --force*": "deny",
+      "git reset --hard*": "deny",
+      "git clean -*": "deny",
+      "chmod -R *": "deny",
+      "chown -R *": "deny",
+      "kill -9 *": "deny",
+      "pkill -9*": "deny",
+      "killall -9*": "deny",
+      "useradd*": "deny",
+      "userdel*": "deny",
+      "passwd *": "deny",
+      "docker rm -f *": "deny",
+      "docker rmi *": "deny",
+      "docker system prune*": "deny",
+      "docker volume rm *": "deny",
+      "curl * | sh*": "deny",
+      "curl * | bash*": "deny",
+      "wget * | sh*": "deny",
+      "wget * | bash*": "deny"
+    },
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "webfetch": "allow",
+    "websearch": "allow",
+    "task": "allow",
+    "external_directory": "allow",
+    "doom_loop": "deny",
+    "question": "deny"
+  }
+}

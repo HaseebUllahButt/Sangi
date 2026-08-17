@@ -1,0 +1,19 @@
+{
+  "name": "whatsapp-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal AI assistant over WhatsApp (Baileys + opencode serve)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "brain": "opencode serve --port 4096 --hostname 127.0.0.1"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.21",
+    "mammoth": "^1.12.1",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.35.3"
+  }
+}
