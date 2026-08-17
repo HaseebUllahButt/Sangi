@@ -60,3 +60,31 @@ sudo systemctl enable --now sangi
 ```
 
 The bot auto-starts the opencode brain (`npm run brain`) when needed, or run it yourself and set `OPENCODE_URL`.
+
+## Running with Docker
+
+No node/python on the host needed — everything (brain included) runs in one container:
+
+```bash
+git clone https://github.com/HaseebUllahButt/Sangi.git
+cd Sangi
+cp .env.example .env   # fill in GROQ_API_KEY / ALLOWED_NUMBERS
+
+docker build -t sangi .
+docker run -d --name sangi \
+  --env-file .env \
+  -v $PWD/creds:/app/creds \
+  -v $PWD/workspace:/app/workspace \
+  -v $PWD/downloads:/app/downloads \
+  -v $PWD/task-queue:/app/task-queue \
+  -v $PWD/outbox:/app/outbox \
+  sangi
+```
+
+Check the QR:
+
+```bash
+docker logs -f sangi     # QR / pairing code appears here
+```
+
+Volumes keep your WhatsApp session and files after container restarts. Note: image generation is a separate service (needs a GUI for the one-time Flow login) and is not included in the container — run it on the host per [docs/FLOW_SETUP.md](docs/FLOW_SETUP.md).
