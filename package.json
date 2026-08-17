@@ -5,8 +5,12 @@
   "type": "module",
   "description": "Personal AI assistant over WhatsApp (Baileys + opencode serve)",
   "main": "index.js",
+  "engines": {
+    "node": ">=20.6"
+  },
   "scripts": {
     "start": "node --env-file=.env index.js",
+    "setup": "bash setup.sh",
     "brain": "opencode serve --port 4096 --hostname 127.0.0.1"
   },
   "dependencies": {
